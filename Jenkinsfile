@@ -10,8 +10,8 @@ pipeline {
                 echo 'Building..'
 		sh 'groups'
                 sh 'docker ps'
-		sh "docker login ${RE_URL} -u ${RE_USER} -p ${RE_PASS}"
 		sh "docker build -t ${DOCKER_IMG} ."
+		sh "docker login ${RE_URL} -u ${RE_USER} -p ${RE_PASS}"
 		sh "docker push $DOCKER_IMG"
             }
         }
@@ -19,6 +19,7 @@ pipeline {
             steps {
                 echo 'Deploying....'
 		
+		sh "docker login ${RE_URL} -u ${RE_USER} -p ${RE_PASS}"
 		sh "docker pull ${DOCKER_IMG}"
 		sh "docker rm ${DOCKER_CONTAINER} || true"
 		sh "docker run --name ${DOCKER_CONTAINER} -dp 3000:3000 ${DOCKER_IMG}"
