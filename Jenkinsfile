@@ -2,13 +2,14 @@ pipeline {
     agent any
     environment {
 	DOCKER_IMG = "${RE_URL}/porfolio/portfolio:v1_${GIT_COMMIT}"
+	DOCKER_CONTAINER = portfolio
     }
     stages {
         stage('Build') {
             steps {
                 echo 'Building..'
 		sh "docker login ${RE_URL} -u ${RE_USER} -p ${RE_PASS}"
-		sh "docker build -t ${DOCKER_IMG}"
+		sh "docker build -t ${DOCKER_IMG} ."
 		sh "docker push $DOCKER_IMG"
             }
         }
@@ -17,6 +18,8 @@ pipeline {
                 echo 'Deploying....'
 		sh "docker login ${RE_URL} -u ${RE_USER} -p ${RE_PASS}"
 		sh "docker pull ${DOCKER_IMG}"
+		sh "docker rm ${DOCKER_CONTAINER} || true"
+		sh "docker run --name ${DOCKER_CONTAINER} -dp 3000:3000 ${DOCKER_IMG}"
             }
         }
     }
