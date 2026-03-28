@@ -8,6 +8,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+		sh 'groups'
+                sh 'docker ps'
 		sh "docker login ${RE_URL} -u ${RE_USER} -p ${RE_PASS}"
 		sh "docker build -t ${DOCKER_IMG} ."
 		sh "docker push $DOCKER_IMG"
