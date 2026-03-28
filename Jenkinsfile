@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-	DOCKER_IMG = "${RE_URL}/porfolio/portfolio:v1_${GIT_COMMIT[0..7]}"
+	DOCKER_IMG = "${RE_URL}/portfolio/portfolio:v1_${GIT_COMMIT[0..7]}"
 	DOCKER_CONTAINER = "portfolio"
     }
     stages {
